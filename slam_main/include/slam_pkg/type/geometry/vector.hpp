@@ -4,29 +4,56 @@
 
 #pragma once
 
-#include <cmath>
+#include <eigen3/Eigen/Eigen>
 
-namespace Slam
-{
-  struct Vector
-  {
-    double x{.0};
-    double y{.0};
-    double z{.0};
+#include "util/math.hpp"
 
-    [[nodiscard]] double hypot() const { return std::hypot(x, y, z); }
+namespace Slam {
 
-    [[nodiscard]] double dot(Vector const &v) const { return {v.x * x + v.y * y + v.z * z}; }
+class Vector {
+ public:
+  Vector(double x, double y, double z) : value(x, y, z) {}
 
-    [[nodiscard]] Vector cross(Vector const &v) const
-    {
-      // reference: https://en.wikipedia.org/wiki/Cross_product#Computing
-      //            (a2*b3 - a3*b2)i + (a3*b1 - a1*b3)j + (a1*b2 - a2*b1)z
-      return {y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x};
-    }
+  Vector(Eigen::Vector3d const& v) : value(v) {}
 
-    double operator*(Vector const &v) const { return dot(v); }
+  Vector(Eigen::Vector3d&& v) : value(v) {}
 
-    Vector operator^(Vector const &v) const { return cross(v); }
-  };
-} // namespace Slam
+  [[nodiscard]] double norm() const { return value.stableNorm(); }
+
+  [[nodiscard]] double dist_to(Vector const& p) const {
+    return (p.value - value).stableNorm();
+  }
+
+  [[nodiscard]] double dot(Vector const& p) const { return value.dot(p.value); }
+
+  [[nodiscard]] Vector cross(Vector const& p) const {
+    return value.cross(p.value);
+  }
+
+  [[nodiscard]] double angle_to(Vector const& p) const {
+    return math::angle_constrain(acos(dot(p) / (norm() * p.norm())));
+  }
+
+  Vector operator+(Vector const& rhs) const { return {value + rhs.value}; }
+
+  Vector operator-(Vector const& rhs) const { return {value - rhs.value}; }
+
+  template <typename T>
+  Vector operator*(T rhs) const {
+    return {value * rhs};
+  }
+
+  Eigen::Vector3d value{};
+
+  double& x{value.x()};
+  double& y{value.y()};
+  double& z{value.z()};
+};
+
+// wrapper for scalar lhs value.
+template <typename T>
+Vector operator*(T lhs, Vector const& v) {
+  return v * lhs;
+}
+
+}  // namespace Slam
