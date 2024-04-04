@@ -6,12 +6,13 @@
 
 #include <eigen3/Eigen/Eigen>
 
-#include "util/math.hpp"
+#include "util/math/math.hpp"
 
 namespace Slam {
 
-class Vector {
- public:
+struct Vector {
+  Vector() = default;
+
   Vector(double x, double y, double z) : value(x, y, z) {}
 
   Vector(Eigen::Vector3d const& v) : value(v) {}
@@ -38,22 +39,18 @@ class Vector {
 
   Vector operator-(Vector const& rhs) const { return {value - rhs.value}; }
 
-  template <typename T>
-  Vector operator*(T rhs) const {
-    return {value * rhs};
-  }
+  double operator*(Vector const& rhs) const { return dot(rhs); }
+
+  Vector operator^(Vector const& rhs) const { return cross(rhs); }
 
   Eigen::Vector3d value{};
 
-  double& x{value.x()};
-  double& y{value.y()};
-  double& z{value.z()};
+  const double& x{value.x()};
+  const double& y{value.y()};
+  const double& z{value.z()};
 };
 
 // wrapper for scalar lhs value.
-template <typename T>
-Vector operator*(T lhs, Vector const& v) {
-  return v * lhs;
-}
+inline Vector operator*(double lhs, Vector const& v) { return {v.value * lhs}; }
 
 }  // namespace Slam

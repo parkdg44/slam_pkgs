@@ -27,6 +27,8 @@ BraceWrapping:
   SplitEmptyRecord: false
   SplitEmptyNamespace: false
 
+ColumnLimit: 100
+
 IncludeCategories:
   - Regex: '^<.*'
     Priority: 1

@@ -5,7 +5,6 @@
 #pragma once
 
 #include "type/types.hpp"
-#include "util/math.hpp"
 
 namespace Slam::math {
 

@@ -4,13 +4,14 @@
 
 #pragma once
 
-#include "util/math.hpp"
+#include "util/math/math.hpp"
 #include "vector.hpp"
 
 namespace Slam {
 
-class Angle {
- public:
+struct Angle {
+  Angle() = default;
+
   Angle(double angle) : value(math::angle_constrain(angle)) {}
 
   Angle(Vector const& v1, Vector const& v2) : value(v1.angle_to(v2)) {}
@@ -32,7 +33,7 @@ class Angle {
 
   Angle operator-() const { return Angle{-value}; }
 
-  double value{};
+  double value{.0};
 };
 
 }  // namespace Slam

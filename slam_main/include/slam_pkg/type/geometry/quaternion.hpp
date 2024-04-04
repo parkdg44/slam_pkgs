@@ -8,8 +8,9 @@
 
 namespace Slam {
 
-class Quaternion {
- public:
+struct Quaternion {
+  Quaternion() = default;
+
   Quaternion(double x, double y, double z, double w) : value(x, y, z, w) {}
 
   Quaternion(Eigen::Quaterniond&& q) : value(q) {}
@@ -27,6 +28,8 @@ class Quaternion {
   [[nodiscard]] Quaternion inverse() const { return value.inverse(); }
 
   [[nodiscard]] Quaternion pow(double exponent) const {
+    // reference:
+    // https://en.wikipedia.org/wiki/Quaternion#Functions_of_a_quaternion_variable
     Eigen::AngleAxisd angle_axis{value};
     angle_axis.angle() *= exponent;
     return Eigen::Quaterniond{angle_axis};
@@ -34,14 +37,14 @@ class Quaternion {
 
   Quaternion operator*(const Quaternion& q) const { return value * q.value; }
 
-  Quaternion operator^(double value) const { return this->pow(value); }
+  Quaternion operator^(double value) const { return pow(value); }
 
-  Eigen::Quaterniond value;
+  Eigen::Quaterniond value{};
 
-  double& x{value.x()};
-  double& y{value.y()};
-  double& z{value.z()};
-  double& w{value.w()};
+  const double& x{value.x()};
+  const double& y{value.y()};
+  const double& z{value.z()};
+  const double& w{value.w()};
 };
 
 }  // namespace Slam
