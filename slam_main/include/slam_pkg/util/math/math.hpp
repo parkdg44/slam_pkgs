@@ -6,7 +6,7 @@
 
 #include "cmath"
 
-namespace Slam::math {
+namespace Slam::util {
 
 inline double angle_constrain(double x) {
   static constexpr double pi = M_PI;
