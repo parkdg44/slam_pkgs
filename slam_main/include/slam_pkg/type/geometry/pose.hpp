@@ -4,16 +4,21 @@
 
 #pragma once
 
-#include "type/geometry/point.hpp"
-#include "type/geometry/quaternion.hpp"
-#include "type/time/time.hpp"
+#include "slam_pkg/type/geometry/point.hpp"
+#include "slam_pkg/type/geometry/quaternion.hpp"
 
 namespace Slam {
 
 struct Pose {
-  Header header{};
   Point p{};
   Quaternion q{};
+
+  Pose operator*(Pose const& rhs) const { return {p + q.rotate(rhs.p), q * rhs.q}; }
+};
+
+struct PoseStamped {
+  Header header;
+  Pose pose;
 };
 
 }  // namespace Slam

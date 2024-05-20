@@ -23,15 +23,13 @@ struct Point {
 
   [[nodiscard]] double norm() const { return value.stableNorm(); }
 
-  [[nodiscard]] double dist_to(Point const& p) const {
-    return (p - *this).norm();
-  }
+  [[nodiscard]] double dist_to(Point const& p) const { return (p - *this).norm(); }
 
   Eigen::Vector3d value{};
 
-  const double& x{value.x()};
-  const double& y{value.y()};
-  const double& z{value.z()};
+  double& x{value.x()};
+  double& y{value.y()};
+  double& z{value.z()};
 };
 
 }  // namespace Slam

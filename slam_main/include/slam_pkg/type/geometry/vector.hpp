@@ -6,7 +6,7 @@
 
 #include <eigen3/Eigen/Eigen>
 
-#include "util/math/math.hpp"
+#include "slam_pkg/util/math/math.hpp"
 
 namespace Slam {
 
@@ -21,18 +21,14 @@ struct Vector {
 
   [[nodiscard]] double norm() const { return value.stableNorm(); }
 
-  [[nodiscard]] double dist_to(Vector const& p) const {
-    return (p.value - value).stableNorm();
-  }
+  [[nodiscard]] double dist_to(Vector const& p) const { return (p.value - value).stableNorm(); }
 
   [[nodiscard]] double dot(Vector const& p) const { return value.dot(p.value); }
 
-  [[nodiscard]] Vector cross(Vector const& p) const {
-    return value.cross(p.value);
-  }
+  [[nodiscard]] Vector cross(Vector const& p) const { return value.cross(p.value); }
 
   [[nodiscard]] double angle_to(Vector const& p) const {
-    return math::angle_constrain(acos(dot(p) / (norm() * p.norm())));
+    return util::angle_constrain(acos(dot(p) / (norm() * p.norm())));
   }
 
   Vector operator+(Vector const& rhs) const { return {value + rhs.value}; }

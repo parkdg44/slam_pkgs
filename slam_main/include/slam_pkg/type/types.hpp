@@ -5,12 +5,19 @@
 #pragma once
 
 // geometry
-#include "type/geometry/angle.hpp"
-#include "type/geometry/header.hpp"
-#include "type/geometry/point.hpp"
-#include "type/geometry/pose.hpp"
-#include "type/geometry/quaternion.hpp"
-#include "type/geometry/vector.hpp"
+#include "./geometry/angle.hpp"
+#include "./geometry/header.hpp"
+#include "./geometry/odometry.hpp"
+#include "./geometry/point.hpp"
+#include "./geometry/pose.hpp"
+#include "./geometry/quaternion.hpp"
+#include "./geometry/twist.hpp"
+#include "./geometry/vector.hpp"
 
 // time
-#include "type/time/time.hpp"
+#include "./time/time.hpp"
+
+// sensor
+#include "./sensor/image.hpp"
+#include "./sensor/laser_scan.hpp"
+#include "./sensor/point_cloud.hpp"

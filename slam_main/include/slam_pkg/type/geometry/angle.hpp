@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "util/math/math.hpp"
+#include "slam_pkg/util/math/math.hpp"
 #include "vector.hpp"
 
 namespace Slam {
@@ -12,7 +12,7 @@ namespace Slam {
 struct Angle {
   Angle() = default;
 
-  Angle(double angle) : value(math::angle_constrain(angle)) {}
+  Angle(double angle) : value(util::angle_constrain(angle)) {}
 
   Angle(Vector const& v1, Vector const& v2) : value(v1.angle_to(v2)) {}
 
@@ -22,11 +22,11 @@ struct Angle {
   }
 
   Angle operator+(Angle const& rhs) const {
-    return math::angle_constrain(value + rhs.value);
+    return util::angle_constrain(value + rhs.value);
   }
 
   Angle operator-(Angle const& rhs) const {
-    return math::angle_constrain(value - rhs.value);
+    return util::angle_constrain(value - rhs.value);
   }
 
   Angle operator+() const { return Angle{+value}; }
