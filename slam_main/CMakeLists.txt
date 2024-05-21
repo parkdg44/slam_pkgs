@@ -27,7 +27,8 @@ find_package(tf2_ros REQUIRED)
 
 file(GLOB_RECURSE SRCS src/*.cpp)
 
-include_directories(include/slam_pkg)
+include_directories(include)
+
 add_executable(${PROJECT_NAME} ${SRCS})
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 ament_target_dependencies(${PROJECT_NAME}
@@ -38,6 +39,15 @@ ament_target_dependencies(${PROJECT_NAME}
 	geometry_msgs
 	tf2
 	tf2_ros
+)
+
+install(TARGETS
+	${PROJECT_NAME}
+	DESTINATION lib/${PROJECT_NAME})
+
+
+install(DIRECTORY launch
+	DESTINATION share/${PROJECT_NAME}
 )
 
 if (BUILD_TESTING)
