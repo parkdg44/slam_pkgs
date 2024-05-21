@@ -39,6 +39,11 @@ struct Vector {
 
   Vector operator^(Vector const& rhs) const { return cross(rhs); }
 
+  Vector& operator=(const Vector& v) {
+    value = v.value;
+    return *this;
+  }
+
   Eigen::Vector3d value{};
 
   const double& x{value.x()};

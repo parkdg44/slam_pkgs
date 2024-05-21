@@ -99,8 +99,8 @@ inline Point from_ros(geometry_msgs::msg::Point32 const& data) {
   return output;
 }
 
-inline PointCloud<Point> from_ros(sensor_msgs::msg::PointCloud const& data) {
-  PointCloud<Point> output;
+inline PointCloud from_ros(sensor_msgs::msg::PointCloud const& data) {
+  PointCloud output;
   output.header = from_ros(data.header);
   output.points.reserve(data.points.size());
   for (const auto& p : data.points) {

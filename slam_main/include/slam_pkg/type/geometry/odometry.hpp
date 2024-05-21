@@ -9,8 +9,8 @@
 namespace Slam {
 
 struct Odometry {
-  Header header;
-  Pose pose;  
+  Header header{};
+  Pose pose{};
 };
 
 }  // namespace Slam

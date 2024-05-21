@@ -15,7 +15,9 @@ struct Point {
 
   Point(Eigen::Vector3d const& p) : value(p) {}
 
-  Point(Eigen::Vector3d&& p) : value(p) {}
+  Point(Eigen::Vector3d&& p) noexcept : value(p) {}
+
+  Point operator-() const { return Point{-value}; }
 
   Point operator-(Point const& rhs) const { return Point{value - rhs.value}; }
 
@@ -24,6 +26,11 @@ struct Point {
   [[nodiscard]] double norm() const { return value.stableNorm(); }
 
   [[nodiscard]] double dist_to(Point const& p) const { return (p - *this).norm(); }
+
+  Point& operator=(const Point& p) {
+    value = p.value;
+    return *this;
+  }
 
   Eigen::Vector3d value{};
 

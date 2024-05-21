@@ -5,15 +5,13 @@
 #pragma once
 
 #include "slam_pkg/type/geometry/point.hpp"
+#include "slam_pkg/type/geometry/pose.hpp"
 
 namespace Slam {
 
-template <typename T>
 struct PointCloud {
   Header header{};
-  std::vector<T> points{};
+  std::vector<Point> points{};
 };
-
-template struct PointCloud<Point>;
 
 }  // namespace Slam

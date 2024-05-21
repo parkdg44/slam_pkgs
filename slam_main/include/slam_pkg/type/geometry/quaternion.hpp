@@ -42,9 +42,7 @@ struct Quaternion {
     return Eigen::Quaterniond{angle_axis};
   }
 
-  [[nodiscard]] Point rotate(const Point& p) const {
-    return {value.matrix() * p.value};
-  }
+  [[nodiscard]] Point rotate(const Point& p) const { return {value.matrix() * p.value}; }
 
   [[nodiscard]] Vector to_rpy() const { return {value.matrix().eulerAngles(0, 1, 2)}; }
 
@@ -59,6 +57,11 @@ struct Quaternion {
   Quaternion operator*(const Quaternion& q) const { return value * q.value; }
 
   Quaternion operator^(double value) const { return pow(value); }
+
+  Quaternion& operator=(const Quaternion& q) {
+    value = q.value;
+    return *this;
+  }
 
   Eigen::Quaterniond value{};
 
