@@ -191,7 +191,7 @@
     </include>
 
     <include>      
-      <uri>../../model/tugbot/model.sdf</uri>
+      <uri>model://model/tugbot/model.sdf</uri>
       <name>tugbot</name>
       <pose>13.9 -10.6 0.1 0 0 0</pose>
     </include>

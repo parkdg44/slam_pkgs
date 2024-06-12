@@ -32,7 +32,8 @@ def generate_launch_description():
     bridge_config_file = os.path.join(gz_root_path, 'bridge.yaml')
 
     gz_process = ExecuteProcess(
-        cmd=['ign', 'gazebo', '-r', sdf_file]
+        cmd=['ign', 'gazebo', '-r', sdf_file],
+        additional_env={'GZ_SIM_RESOURCE_PATH': f'{this_package}'}
     )
 
     bridge_node = Node(
@@ -41,17 +42,6 @@ def generate_launch_description():
         parameters=[{
             'config_file': bridge_config_file
         }],
-
-        # arguments=[
-        #     '/world/default/model/double_pendulum_with_base0/joint_state@'
-        #     'sensor_msgs/msg/JointState[gz.msgs.Model',
-        #     '/model/double_pendulum_with_base0/pose@'
-        #     'tf2_msgs/msg/TFMessage[gz.msgs.Pose_V'
-        # ],
-        # remappings=[
-        #     ('/model/double_pendulum_with_base0/pose', '/tf'),
-        #     ('/world/default/model/double_pendulum_with_base0/joint_state', '/joint_states')
-        # ]
     )
 
     rviz_node = Node(
