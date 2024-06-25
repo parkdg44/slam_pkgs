@@ -33,7 +33,9 @@ def generate_launch_description():
 
     gz_process = ExecuteProcess(
         cmd=['ign', 'gazebo', '-r', sdf_file],
-        additional_env={'GZ_SIM_RESOURCE_PATH': f'{this_package}'}
+        additional_env={
+            'GZ_SIM_RESOURCE_PATH': f'{this_package}',
+        }
     )
 
     bridge_node = Node(
