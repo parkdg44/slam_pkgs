@@ -4,10 +4,14 @@
 
 #pragma once
 
+#include <cv_bridge/cv_bridge.h>
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <geometry_msgs/msg/twist.hpp>
+#include <rclcpp/rclcpp.hpp>
+#include <sensor_msgs/msg/image.hpp>
 #include <sensor_msgs/msg/laser_scan.hpp>
 #include <sensor_msgs/msg/point_cloud.hpp>
+#include <sensor_msgs/msg/point_cloud2.hpp>
 
 #include "slam_pkg/type/types.hpp"
 
@@ -68,45 +72,86 @@ inline geometry_msgs::msg::Twist to_ros(Twist const& data) {
 
 #pragma region from_ros
 
-inline Header from_ros(std_msgs::msg::Header const& data) {
+inline Header from_ros(std_msgs::msg::Header const& msg) {
   Header output;
-  output.ref_frame_id = data.frame_id;
-  output.stamp = rclcpp::Time(data.stamp).nanoseconds();
+  output.ref_frame_id = msg.frame_id;
+  output.stamp = rclcpp::Time(msg.stamp).nanoseconds();
   return output;
 }
 
-inline LaserScan from_ros(sensor_msgs::msg::LaserScan const& data) {
+inline LaserScan from_ros(sensor_msgs::msg::LaserScan const& msg) {
   LaserScan output;
-  output.header = from_ros(data.header);
-  output.ranges = data.ranges;
-  output.intensities = data.intensities;
+  output.header = from_ros(msg.header);
+  output.ranges = msg.ranges;
+  output.intensities = msg.intensities;
   ScanInfo& info = output.info;
-  info.angle_increment = data.angle_increment;
-  info.angle_max = data.angle_max;
-  info.angle_min = data.angle_min;
-  info.range_max = data.range_max;
-  info.range_min = data.range_min;
-  info.scan_time = data.scan_time;
-  info.time_increment = data.time_increment;
+  info.angle_increment = msg.angle_increment;
+  info.angle_max = msg.angle_max;
+  info.angle_min = msg.angle_min;
+  info.range_max = msg.range_max;
+  info.range_min = msg.range_min;
+  info.scan_time = msg.scan_time;
+  info.time_increment = msg.time_increment;
   return output;
 }
 
-inline Point from_ros(geometry_msgs::msg::Point32 const& data) {
+inline Point from_ros(geometry_msgs::msg::Point32 const& msg) {
   Point output;
-  output.x = data.x;
-  output.y = data.y;
-  output.z = data.z;
+  output.x = msg.x;
+  output.y = msg.y;
+  output.z = msg.z;
   return output;
 }
 
-inline PointCloud from_ros(sensor_msgs::msg::PointCloud const& data) {
+inline PointCloud from_ros(sensor_msgs::msg::PointCloud const& msg) {
   PointCloud output;
-  output.header = from_ros(data.header);
-  output.points.reserve(data.points.size());
-  for (const auto& p : data.points) {
+  output.header = from_ros(msg.header);
+  output.points.reserve(msg.points.size());
+  for (const auto& p : msg.points) {
     output.points.push_back(from_ros(p));
   }
   return output;
+}
+
+inline PointCloud from_ros(sensor_msgs::msg::PointCloud2 const& msg) {
+  PointCloud output;
+
+  int width = static_cast<int>(msg.width);
+  int height = static_cast<int>(msg.width);
+  int step = static_cast<int>(msg.point_step);
+  uint datatype = msg.fields[0].datatype;
+
+  int p_size = width * height;
+  output.points.resize(p_size);
+
+  // float 16 (float)
+  if (datatype == 7) {
+    float xyz[3];
+    for (int i = 0; i < width * height; i++) {
+      memcpy(&xyz, &msg.data[i * step], 3 * sizeof(float));
+      output.points[i] = {xyz[0], xyz[1], xyz[2]};
+    }
+  }
+  // float 32 (double)
+  else if (datatype == 8) {
+    double xyz[3];
+    for (int i = 0; i < width * height; i++) {
+      memcpy(&xyz, &msg.data[i * step], 3 * sizeof(double));
+      output.points[i] = {xyz[0], xyz[1], xyz[2]};
+    }
+  }
+
+  output.header = from_ros(msg.header);
+  output.info.width = width;
+  output.info.height = height;
+
+  return output;
+}
+
+inline Image from_ros(sensor_msgs::msg::Image const& msg) {
+  cv_bridge::toCvCopy(msg, "");
+
+  return {};
 }
 
 #pragma endregion from_ros

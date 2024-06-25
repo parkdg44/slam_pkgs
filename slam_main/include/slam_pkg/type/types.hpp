@@ -4,6 +4,9 @@
 
 #pragma once
 
+// time
+#include "./time/time.hpp"
+
 // geometry
 #include "./geometry/angle.hpp"
 #include "./geometry/header.hpp"
@@ -13,9 +16,6 @@
 #include "./geometry/quaternion.hpp"
 #include "./geometry/twist.hpp"
 #include "./geometry/vector.hpp"
-
-// time
-#include "./time/time.hpp"
 
 // sensor
 #include "./sensor/image.hpp"

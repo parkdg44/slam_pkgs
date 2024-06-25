@@ -8,43 +8,23 @@ endif ()
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
 include(dependencies)
+include(ros2)
 
-# find ament dependencies
-find_package(ament_cmake REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(sensor_msgs REQUIRED)
-find_package(std_msgs REQUIRED)
-find_package(nav_msgs REQUIRED)
-find_package(geometry_msgs REQUIRED)
-find_package(tf2 REQUIRED)
-find_package(tf2_ros REQUIRED)
-
-# PCL
-#find_package(PCL REQUIRED COMPONENTS)
-#find_package(pcl_ros REQUIRED)
-#find_package(pcl_conversions REQUIRED)
-#include_directories(${PCL_INCLUDE_DIRS})
-
-file(GLOB_RECURSE SRCS src/*.cpp)
+MESSAGE(STATUS "----------------------------")
+MESSAGE(STATUS "LIBS = ${LIBS}")
+MESSAGE(STATUS "ROS2_LIBS = ${ROS2_LIBS}")
+MESSAGE(STATUS "----------------------------")
 
 include_directories(include)
+file(GLOB_RECURSE SRCS src/*.cpp)
 
 add_executable(${PROJECT_NAME} ${SRCS})
 target_link_libraries(${PROJECT_NAME} ${LIBS})
-ament_target_dependencies(${PROJECT_NAME}
-	rclcpp
-	sensor_msgs
-	std_msgs
-	nav_msgs
-	geometry_msgs
-	tf2
-	tf2_ros
-)
+ament_target_dependencies(${PROJECT_NAME} ${ROS2_LIBS})
 
 install(TARGETS
 	${PROJECT_NAME}
 	DESTINATION lib/${PROJECT_NAME})
-
 
 install(DIRECTORY launch
 	DESTINATION share/${PROJECT_NAME}

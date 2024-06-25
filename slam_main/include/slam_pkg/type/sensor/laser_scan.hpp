@@ -25,11 +25,4 @@ struct LaserScan {
   std::vector<float> intensities{};
 };
 
-template <typename T>
-struct ScanPointCloud {
-  LaserScan scan{};
-  const Header& header{scan.header};
-  std::vector<T> points{};
-};
-
 }  // namespace Slam
