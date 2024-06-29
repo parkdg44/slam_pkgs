@@ -27,16 +27,15 @@ struct Point {
 
   [[nodiscard]] double dist_to(Point const& p) const { return (p - *this).norm(); }
 
-  Point& operator=(const Point& p) {
-    value = p.value;
-    return *this;
-  }
+  [[nodiscard]] double x() const { return value.x(); }
+  [[nodiscard]] double y() const { return value.y(); }
+  [[nodiscard]] double z() const { return value.z(); }
+
+  double& x() { return value.x(); }
+  double& y() { return value.y(); }
+  double& z() { return value.z(); }
 
   Eigen::Vector3d value{};
-
-  double& x{value.x()};
-  double& y{value.y()};
-  double& z{value.z()};
 };
 
 }  // namespace Slam

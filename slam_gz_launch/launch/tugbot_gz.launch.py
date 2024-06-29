@@ -32,7 +32,8 @@ def generate_launch_description():
     bridge_config_file = os.path.join(gz_root_path, 'bridge.yaml')
 
     gz_process = ExecuteProcess(
-        cmd=['ign', 'gazebo', '-r', sdf_file],
+        # cmd=['ign', 'gazebo', '-r', sdf_file],
+        cmd=['ign', 'gazebo', '-r', sdf_file, '-s'],
         additional_env={
             'GZ_SIM_RESOURCE_PATH': f'{this_package}',
         }

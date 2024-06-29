@@ -11,15 +11,16 @@ include(dependencies)
 include(ros2)
 
 MESSAGE(STATUS "----------------------------")
-MESSAGE(STATUS "LIBS = ${LIBS}")
-MESSAGE(STATUS "ROS2_LIBS = ${ROS2_LIBS}")
+MESSAGE(STATUS "LIBS             = ${LIBS}")
+MESSAGE(STATUS "TARGET_LINK_LIBS = ${TARGET_LINK_LIBS}")
+MESSAGE(STATUS "ROS2_LIBS        = ${ROS2_LIBS}")
 MESSAGE(STATUS "----------------------------")
 
 include_directories(include)
 file(GLOB_RECURSE SRCS src/*.cpp)
 
 add_executable(${PROJECT_NAME} ${SRCS})
-target_link_libraries(${PROJECT_NAME} ${LIBS})
+target_link_libraries(${PROJECT_NAME} ${TARGET_LINK_LIBS})
 ament_target_dependencies(${PROJECT_NAME} ${ROS2_LIBS})
 
 install(TARGETS

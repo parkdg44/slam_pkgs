@@ -39,16 +39,15 @@ struct Vector {
 
   Vector operator^(Vector const& rhs) const { return cross(rhs); }
 
-  Vector& operator=(const Vector& v) {
-    value = v.value;
-    return *this;
-  }
+  [[nodiscard]] double x() const { return value.x(); }
+  [[nodiscard]] double y() const { return value.y(); }
+  [[nodiscard]] double z() const { return value.z(); }
+
+  double& x() { return value.x(); }
+  double& y() { return value.y(); }
+  double& z() { return value.z(); }
 
   Eigen::Vector3d value{};
-
-  const double& x{value.x()};
-  const double& y{value.y()};
-  const double& z{value.z()};
 };
 
 // wrapper for scalar lhs value.

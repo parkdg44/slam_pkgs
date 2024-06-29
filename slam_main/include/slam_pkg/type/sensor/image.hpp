@@ -4,14 +4,15 @@
 
 #pragma once
 
-#include <opencv2/core.hpp>
-#include <opencv2/features2d.hpp>
-#include <opencv2/highgui.hpp>
 #include <opencv2/opencv.hpp>
+
+#include "slam_pkg/type/geometry/header.hpp"
 
 namespace Slam {
 
 struct Image {
+  Header header;
+  std::string encoding;
   cv::Mat value;
 };
 

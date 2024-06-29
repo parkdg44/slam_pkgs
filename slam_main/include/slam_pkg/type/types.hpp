@@ -18,6 +18,7 @@
 #include "./geometry/vector.hpp"
 
 // sensor
+#include "./sensor/camera_info.hpp"
 #include "./sensor/image.hpp"
 #include "./sensor/laser_scan.hpp"
 #include "./sensor/point_cloud.hpp"

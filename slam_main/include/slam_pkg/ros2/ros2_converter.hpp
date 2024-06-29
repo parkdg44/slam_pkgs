@@ -8,6 +8,7 @@
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <geometry_msgs/msg/twist.hpp>
 #include <rclcpp/rclcpp.hpp>
+#include <sensor_msgs/msg/camera_info.hpp>
 #include <sensor_msgs/msg/image.hpp>
 #include <sensor_msgs/msg/laser_scan.hpp>
 #include <sensor_msgs/msg/point_cloud.hpp>
@@ -30,18 +31,18 @@ inline std_msgs::msg::Header to_ros(Header const& data) {
 
 inline geometry_msgs::msg::Point to_ros(Point const& data) {
   geometry_msgs::msg::Point output;
-  output.x = data.x;
-  output.y = data.y;
-  output.z = data.z;
+  output.x = data.x();
+  output.x = data.y();
+  output.x = data.z();
   return output;
 }
 
 inline geometry_msgs::msg::Quaternion to_ros(Quaternion const& data) {
   geometry_msgs::msg::Quaternion output;
-  output.w = data.w;
-  output.x = data.x;
-  output.y = data.y;
-  output.z = data.z;
+  output.w = data.w();
+  output.x = data.x();
+  output.y = data.y();
+  output.z = data.z();
   return output;
 }
 
@@ -55,9 +56,9 @@ inline geometry_msgs::msg::PoseStamped to_ros(PoseStamped const& data) {
 
 inline geometry_msgs::msg::Vector3 to_ros(Vector const& data) {
   geometry_msgs::msg::Vector3 output;
-  output.x = data.x;
-  output.y = data.y;
-  output.z = data.z;
+  output.x = data.x();
+  output.y = data.y();
+  output.z = data.z();
   return output;
 }
 
@@ -96,10 +97,7 @@ inline LaserScan from_ros(sensor_msgs::msg::LaserScan const& msg) {
 }
 
 inline Point from_ros(geometry_msgs::msg::Point32 const& msg) {
-  Point output;
-  output.x = msg.x;
-  output.y = msg.y;
-  output.z = msg.z;
+  Point output{msg.x, msg.y, msg.z};
   return output;
 }
 
@@ -149,9 +147,29 @@ inline PointCloud from_ros(sensor_msgs::msg::PointCloud2 const& msg) {
 }
 
 inline Image from_ros(sensor_msgs::msg::Image const& msg) {
-  cv_bridge::toCvCopy(msg, "");
+  Image output;
 
-  return {};
+  auto cv_output = cv_bridge::toCvCopy(msg, msg.encoding);
+  output.header = from_ros(cv_output->header);
+  output.encoding = cv_output->encoding;
+  output.value = std::move(cv_output->image);
+
+  return output;
+}
+
+inline CameraInfo from_ros(sensor_msgs::msg::CameraInfo const& msg) {
+  CameraInfo output;
+
+  output.header = from_ros(msg.header);
+  output.height = msg.height;
+  output.width = msg.width;
+  output.distortion_model = msg.distortion_model;
+  output.d = msg.d;
+  output.k = decltype(output.k){msg.k.data()};
+  output.r = decltype(output.r){msg.r.data()};
+  output.p = decltype(output.p){msg.p.data()};
+
+  return output;
 }
 
 #pragma endregion from_ros

@@ -58,17 +58,17 @@ struct Quaternion {
 
   Quaternion operator^(double value) const { return pow(value); }
 
-  Quaternion& operator=(const Quaternion& q) {
-    value = q.value;
-    return *this;
-  }
+  [[nodiscard]] double w() const { return value.w(); }
+  [[nodiscard]] double x() const { return value.x(); }
+  [[nodiscard]] double y() const { return value.y(); }
+  [[nodiscard]] double z() const { return value.z(); }
+
+  double& w() { return value.w(); }
+  double& x() { return value.x(); }
+  double& y() { return value.y(); }
+  double& z() { return value.z(); }
 
   Eigen::Quaterniond value{};
-
-  const double& x{value.x()};
-  const double& y{value.y()};
-  const double& z{value.z()};
-  const double& w{value.w()};
 };
 
 }  // namespace Slam
