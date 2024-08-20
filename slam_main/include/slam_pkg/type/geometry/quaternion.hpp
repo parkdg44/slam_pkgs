@@ -23,7 +23,13 @@ struct Quaternion {
 
   Quaternion(Eigen::Matrix3d&& q) : value(q) {}
 
-  Quaternion(double r, double p, double y) : value(from_rpy(r, p, y).value) {}
+  Quaternion(double r, double p, double y) {
+    Eigen::Matrix3d m;
+    m = Eigen::AngleAxisd(r, Eigen::Vector3d::UnitX()) *
+        Eigen::AngleAxisd(p, Eigen::Vector3d::UnitY()) *
+        Eigen::AngleAxisd(y, Eigen::Vector3d::UnitZ());
+    value = std::move(m);
+  }
 
   [[nodiscard]] Quaternion conjugate() const { return value.conjugate(); }
 
@@ -46,13 +52,7 @@ struct Quaternion {
 
   [[nodiscard]] Vector to_rpy() const { return {value.matrix().eulerAngles(0, 1, 2)}; }
 
-  static Quaternion from_rpy(double r, double p, double y) {
-    Eigen::Matrix3d m;
-    m = Eigen::AngleAxisd(r, Eigen::Vector3d::UnitX()) *
-        Eigen::AngleAxisd(p, Eigen::Vector3d::UnitY()) *
-        Eigen::AngleAxisd(y, Eigen::Vector3d::UnitZ());
-    return {m};
-  }
+  [[nodiscard]] double angle_to(Quaternion q) const { return value.angularDistance(q.value); }
 
   Quaternion operator*(const Quaternion& q) const { return value * q.value; }
 

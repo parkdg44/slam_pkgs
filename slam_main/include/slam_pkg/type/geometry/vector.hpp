@@ -27,10 +27,6 @@ struct Vector {
 
   [[nodiscard]] Vector cross(Vector const& p) const { return value.cross(p.value); }
 
-  [[nodiscard]] double angle_to(Vector const& p) const {
-    return util::angle_constrain(acos(dot(p) / (norm() * p.norm())));
-  }
-
   Vector operator+(Vector const& rhs) const { return {value + rhs.value}; }
 
   Vector operator-(Vector const& rhs) const { return {value - rhs.value}; }
