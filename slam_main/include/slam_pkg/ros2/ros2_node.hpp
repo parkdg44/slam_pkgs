@@ -35,7 +35,7 @@ class SlamNode : public rclcpp::Node {
   std::unordered_map<std::string, SubPtr<sensor_msgs::msg::CameraInfo>> cam_info_map_{};
   LaserScan scan_{};
 
-  module::OrbExtractor orb_extractor_;
+  std::unordered_map<std::string, module::OrbExtractor> orb_extractors_{};
 };
 
 }  // namespace Slam::ros2

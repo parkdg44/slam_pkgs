@@ -13,10 +13,8 @@ SlamNode::SlamNode() : Node("slam_main") {
       split_str(util::declare_and_get_parameter<std::string>(this, "laser_topics"), ' ');
   auto pcd_topics =
       split_str(util::declare_and_get_parameter<std::string>(this, "pcd_topics"), ' ');
-  auto img_topics =
-      split_str(util::declare_and_get_parameter<std::string>(this, "img_topics"), ' ');
-  auto cam_info_topics =
-      split_str(util::declare_and_get_parameter<std::string>(this, "cam_info_topics"), ' ');
+  auto color_cam_topics =
+      split_str(util::declare_and_get_parameter<std::string>(this, "color_cam_topics"), ' ');
 
   for (const auto& topic : laser_topics) {
     RCLCPP_INFO(get_logger(), "subscribe [%s] LaserScan topic", topic.c_str());
@@ -32,17 +30,15 @@ SlamNode::SlamNode() : Node("slam_main") {
         [this, topic](const sensor_msgs::msg::PointCloud2& data) { ros_callback(topic, data); });
   }
 
-  for (const auto& topic : img_topics) {
-    RCLCPP_INFO(get_logger(), "subscribe [%s] Image topic", topic.c_str());
+  for (const auto& topic : color_cam_topics) {
+    RCLCPP_INFO(get_logger(), "subscribe [%s/color/image] Image topic", topic.c_str());
     img_map_[topic] = create_subscription<sensor_msgs::msg::Image>(
-        topic, rclcpp::SensorDataQoS(),
+        topic + "/color/image", rclcpp::SensorDataQoS(),
         [this, topic](const sensor_msgs::msg::Image& data) { ros_callback(topic, data); });
-  }
 
-  for (const auto& topic : cam_info_topics) {
-    RCLCPP_INFO(get_logger(), "subscribe [%s] CameraInfo topic", topic.c_str());
+    RCLCPP_INFO(get_logger(), "subscribe [%s/color/camera_info]  CameraInfo topic", topic.c_str());
     cam_info_map_[topic] = create_subscription<sensor_msgs::msg::CameraInfo>(
-        topic, rclcpp::SensorDataQoS(),
+        topic + "/color/camera_info", rclcpp::SensorDataQoS(),
         [this, topic](const sensor_msgs::msg::CameraInfo& data) { ros_callback(topic, data); });
   }
 }
@@ -55,10 +51,10 @@ void SlamNode::ros_callback(const std::string& topic, const sensor_msgs::msg::Po
   PointCloud pcd = from_ros(data);
 }
 void SlamNode::ros_callback(const std::string& topic, const sensor_msgs::msg::Image& data) {
-  orb_extractor_.receive_image(from_ros(data));
+  orb_extractors_[topic].receive_data(topic, from_ros(data));
 }
 void SlamNode::ros_callback(const std::string& topic, const sensor_msgs::msg::CameraInfo& data) {
-  orb_extractor_.receive_camera_info(from_ros(data));
+  orb_extractors_[topic].receive_data(topic, from_ros(data));
 }
 
 }  // namespace Slam::ros2
