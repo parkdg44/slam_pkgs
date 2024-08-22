@@ -14,20 +14,14 @@ struct Angle {
 
   Angle(double angle) : value(util::angle_constrain(angle)) {}
 
-  Angle(Vector const& v1, Vector const& v2) : value(v1.angle_to(v2)) {}
-
   template <typename T>
   bool operator==(T const& rhs) {
     return value == rhs;
   }
 
-  Angle operator+(Angle const& rhs) const {
-    return util::angle_constrain(value + rhs.value);
-  }
+  Angle operator+(Angle const& rhs) const { return util::angle_constrain(value + rhs.value); }
 
-  Angle operator-(Angle const& rhs) const {
-    return util::angle_constrain(value - rhs.value);
-  }
+  Angle operator-(Angle const& rhs) const { return util::angle_constrain(value - rhs.value); }
 
   Angle operator+() const { return Angle{+value}; }
 

@@ -13,4 +13,9 @@ struct Twist {
   Vector linear{};
 };
 
+struct TwistWithCovariance {
+  Twist twist{};
+  Covariance<6> cov{};
+};
+
 }  // namespace Slam

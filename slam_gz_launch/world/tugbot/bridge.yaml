@@ -15,11 +15,22 @@
   direction: GZ_TO_ROS      # Default "BIDIRECTIONAL" - Bridge both directions
   # "GZ_TO_ROS" - Bridge Gz topic to ROS
   # "ROS_TO_GZ" - Bridge ROS topic to Gz
-  
+
 - ros_topic_name: "/tf"
   gz_topic_name: "/model/tugbot/pose"
   ros_type_name: "tf2_msgs/msg/TFMessage"
   gz_type_name: "gz.msgs.Pose_V"
+  subscriber_queue: 10       # Default 10
+  publisher_queue: 10        # Default 10
+  lazy: false                # Default "false"
+  direction: GZ_TO_ROS      # Default "BIDIRECTIONAL" - Bridge both directions
+  # "GZ_TO_ROS" - Bridge Gz topic to ROS
+  # "ROS_TO_GZ" - Bridge ROS topic to Gz
+
+- ros_topic_name: "/odom"
+  gz_topic_name: "/model/tugbot/odometry"
+  ros_type_name: "nav_msgs/msg/Odometry"
+  gz_type_name: "gz.msgs.Odometry"
   subscriber_queue: 10       # Default 10
   publisher_queue: 10        # Default 10
   lazy: false                # Default "false"
@@ -39,7 +50,7 @@
   direction: GZ_TO_ROS      # Default "BIDIRECTIONAL" - Bridge both directions
   # "GZ_TO_ROS" - Bridge Gz topic to ROS
   # "ROS_TO_GZ" - Bridge ROS topic to Gz
-  
+
 - ros_topic_name: "/camera_back/color/image"
   gz_topic_name: "/world/world_demo/model/tugbot/link/camera_back/sensor/color/image"
   ros_type_name: "sensor_msgs/msg/Image"
@@ -50,7 +61,7 @@
   direction: GZ_TO_ROS      # Default "BIDIRECTIONAL" - Bridge both directions
   # "GZ_TO_ROS" - Bridge Gz topic to ROS
   # "ROS_TO_GZ" - Bridge ROS topic to Gz
-  
+
 #- ros_topic_name: "/camera_back/depth/camera_info"
 #  gz_topic_name: "/world/world_demo/model/tugbot/link/camera_back/sensor/depth/camera_info"
 #  ros_type_name: "sensor_msgs/msg/CameraInfo"
@@ -153,7 +164,7 @@
   direction: GZ_TO_ROS      # Default "BIDIRECTIONAL" - Bridge both directions
   # "GZ_TO_ROS" - Bridge Gz topic to ROS
   # "ROS_TO_GZ" - Bridge ROS topic to Gz
-  
+
 - ros_topic_name: "/scan_front"
   gz_topic_name: "/world/world_demo/model/tugbot/link/scan_front/sensor/scan_front/scan"
   ros_type_name: "sensor_msgs/msg/LaserScan"

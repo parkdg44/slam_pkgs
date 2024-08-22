@@ -7,6 +7,7 @@
 #include <cv_bridge/cv_bridge.h>
 #include <geometry_msgs/msg/pose_stamped.hpp>
 #include <geometry_msgs/msg/twist.hpp>
+#include <nav_msgs/msg/odometry.hpp>
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/camera_info.hpp>
 #include <sensor_msgs/msg/image.hpp>
@@ -32,8 +33,8 @@ inline std_msgs::msg::Header to_ros(Header const& data) {
 inline geometry_msgs::msg::Point to_ros(Point const& data) {
   geometry_msgs::msg::Point output;
   output.x = data.x();
-  output.x = data.y();
-  output.x = data.z();
+  output.y = data.y();
+  output.z = data.z();
   return output;
 }
 
@@ -169,6 +170,72 @@ inline CameraInfo from_ros(sensor_msgs::msg::CameraInfo const& msg) {
   output.r = decltype(output.r){msg.r.data()};
   output.p = decltype(output.p){msg.p.data()};
 
+  return output;
+}
+
+inline Point from_ros(geometry_msgs::msg::Point const& data) {
+  Point output;
+  output.x() = data.x;
+  output.y() = data.y;
+  output.z() = data.z;
+  return output;
+}
+
+inline Quaternion from_ros(geometry_msgs::msg::Quaternion const& data) {
+  Quaternion output;
+  output.w() = data.w;
+  output.x() = data.x;
+  output.y() = data.y;
+  output.z() = data.z;
+  return output;
+}
+
+inline Pose from_ros(geometry_msgs::msg::Pose const& data) {
+  Pose output;
+  output.p = from_ros(data.position);
+  output.q = from_ros(data.orientation);
+  return output;
+}
+
+inline PoseWithCovariance from_ros(geometry_msgs::msg::PoseWithCovariance const& data) {
+  PoseWithCovariance output;
+  output.pose = from_ros(data.pose);
+  memcpy(output.cov.value.data(), &data.covariance, sizeof(double) * 36);
+  return output;
+}
+
+inline PoseStamped from_ros(geometry_msgs::msg::PoseStamped const& data) {
+  PoseStamped output;
+  output.header = from_ros(data.header);
+  output.pose = from_ros(data.pose);
+  return output;
+}
+
+inline Vector from_ros(geometry_msgs::msg::Vector3 const& data) {
+  Vector output;
+  output.value = {data.x, data.y, data.z};
+  return output;
+}
+
+inline Twist from_ros(geometry_msgs::msg::Twist const& data) {
+  Twist output;
+  output.angular = from_ros(data.angular);
+  output.linear = from_ros(data.linear);
+  return output;
+}
+
+inline TwistWithCovariance from_ros(geometry_msgs::msg::TwistWithCovariance const& data) {
+  TwistWithCovariance output;
+  output.twist = from_ros(data.twist);
+  memcpy(output.cov.value.data(), &data.covariance, sizeof(double) * 36);
+  return output;
+}
+
+inline Odometry from_ros(nav_msgs::msg::Odometry const& data) {
+  Odometry output;
+  output.header = from_ros(data.header);
+  output.pose_w_cov = from_ros(data.pose);
+  output.twist_w_cov = from_ros(data.twist);
   return output;
 }
 

@@ -22,3 +22,6 @@
 #include "./sensor/image.hpp"
 #include "./sensor/laser_scan.hpp"
 #include "./sensor/point_cloud.hpp"
+
+// statistics
+#include "./statistics/covariance.hpp"

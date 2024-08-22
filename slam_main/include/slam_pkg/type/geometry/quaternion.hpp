@@ -7,6 +7,7 @@
 #include <eigen3/Eigen/Eigen>
 
 #include "slam_pkg/type/geometry/point.hpp"
+#include "slam_pkg/type/geometry/vector.hpp"
 
 namespace Slam {
 
@@ -68,7 +69,7 @@ struct Quaternion {
   double& y() { return value.y(); }
   double& z() { return value.z(); }
 
-  Eigen::Quaterniond value{};
+  Eigen::Quaterniond value{1.0, 0.0, 0.0, 0.0};
 };
 
 }  // namespace Slam

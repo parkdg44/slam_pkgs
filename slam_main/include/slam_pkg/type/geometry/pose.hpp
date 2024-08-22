@@ -6,6 +6,7 @@
 
 #include "slam_pkg/type/geometry/point.hpp"
 #include "slam_pkg/type/geometry/quaternion.hpp"
+#include "slam_pkg/type/statistics/covariance.hpp"
 
 namespace Slam {
 
@@ -27,6 +28,11 @@ struct Pose {
 struct PoseStamped {
   Header header{};
   Pose pose{};
+};
+
+struct PoseWithCovariance {
+  Pose pose{};
+  Covariance<6> cov{};
 };
 
 }  // namespace Slam

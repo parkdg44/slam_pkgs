@@ -18,7 +18,7 @@ inline Quaternion to_quat(const Vector& v1) {
 
 inline Vector to_vector(const Quaternion& q) { return q.rotate({1, 0, 0}).value; }
 
-inline double angle_to(const Vector& v1, const Vector& v2) {
+inline Angle angle_to(const Vector& v1, const Vector& v2) {
   return to_quat(v1).angle_to(to_quat(v2));
 }
 
