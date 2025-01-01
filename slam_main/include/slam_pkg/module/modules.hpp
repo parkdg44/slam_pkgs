@@ -5,3 +5,4 @@
 #pragma once
 
 #include "./feature_extractor/orb_extractor.hpp"
+#include "./visualizer/visualizer.hpp"

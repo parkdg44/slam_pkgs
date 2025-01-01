@@ -1,0 +1,3 @@
+[submodule "slam_main/3rdparty/Pangolin"]
+	path = slam_main/3rdparty/Pangolin
+	url = https://github.com/stevenlovegrove/Pangolin.git
