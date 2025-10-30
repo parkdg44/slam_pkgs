@@ -2,7 +2,7 @@
 // Created by park on 24. 2. 14.
 //
 
-#include "slam_pkg/ros2/ros2_node.hpp"
+#include "ros2_node.hpp"
 #include "slam_pkg/type/types.hpp"
 #include "slam_pkg/util/utils.hpp"
 

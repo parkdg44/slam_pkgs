@@ -17,7 +17,7 @@ MESSAGE(STATUS "ROS2_LIBS        = ${ROS2_LIBS}")
 MESSAGE(STATUS "----------------------------")
 
 include_directories(include)
-file(GLOB_RECURSE SRCS src/*.cpp)
+file(GLOB_RECURSE SRCS app/ros2/*.cpp)
 
 add_executable(${PROJECT_NAME} ${SRCS})
 target_link_libraries(${PROJECT_NAME} ${TARGET_LINK_LIBS})

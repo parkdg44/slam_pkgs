@@ -20,9 +20,9 @@ struct Quaternion {
 
   Quaternion(Eigen::Quaterniond&& q) : value(q) {}
 
-  Quaternion(const Eigen::Matrix3d& q) : value(q) {}
+  Quaternion(const Eigen::Matrix3d& R) : value(R) {}
 
-  Quaternion(Eigen::Matrix3d&& q) : value(q) {}
+  Quaternion(Eigen::Matrix3d&& R) : value(R) {}
 
   Quaternion(double r, double p, double y) {
     Eigen::Matrix3d m;

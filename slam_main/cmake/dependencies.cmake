@@ -16,18 +16,6 @@ list(APPEND TARGET_LINK_LIBS ${OpenCV_LIBS})
 
 ################## 3rd party ##################
 
-# subdirectory
-MESSAGE(STATUS "----------------------------")
-MESSAGE(STATUS "load Pangolin...")
-
-add_subdirectory(${CMAKE_SOURCE_DIR}/3rdparty/Pangolin)
-find_package(Pangolin REQUIRED)
-include_directories(${Pangolin_INCLUDE_DIRS})
-list(APPEND TARGET_LINK_LIBS ${Pangolin_LIBRARY})
-
-MESSAGE(STATUS "Pangolin is loaded!")
-MESSAGE(STATUS "----------------------------")
-
 # for header-only
 include_directories(
 	${CMAKE_SOURCE_DIR}/3rdparty

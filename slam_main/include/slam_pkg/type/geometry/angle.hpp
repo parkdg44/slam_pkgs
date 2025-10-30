@@ -12,16 +12,20 @@ namespace Slam {
 struct Angle {
   Angle() = default;
 
-  Angle(double angle) : value(util::angle_constrain(angle)) {}
+  explicit Angle(double angle) : value(util::angle_constrain(angle)) {}
 
   template <typename T>
   bool operator==(T const& rhs) {
     return value == rhs;
   }
 
-  Angle operator+(Angle const& rhs) const { return util::angle_constrain(value + rhs.value); }
+  Angle operator+(Angle const& rhs) const {
+    return Angle(util::angle_constrain(value + rhs.value));
+  }
 
-  Angle operator-(Angle const& rhs) const { return util::angle_constrain(value - rhs.value); }
+  Angle operator-(Angle const& rhs) const {
+    return Angle(util::angle_constrain(value - rhs.value));
+  }
 
   Angle operator+() const { return Angle{+value}; }
 

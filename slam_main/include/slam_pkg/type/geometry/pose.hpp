@@ -18,10 +18,27 @@ struct Pose {
 
   Point operator+(Point const& rhs) const { return {p + q.rotate(rhs)}; }
 
+  [[nodiscard]] Pose inverse() const {
+    // Use SE(3) inverse: R^T and -R^T t
+    Eigen::Isometry3d T = Eigen::Isometry3d::Identity();
+    T.linear() = q.value.toRotationMatrix();
+    T.translation() = p.value;
+    Eigen::Isometry3d Ti = T.inverse();
+    return {Point{Ti.translation()}, Quaternion{Ti.linear()}};
+  }
+
   Pose operator-(Pose const& rhs) const {
-    Point p_diff = p - rhs.p;
-    Quaternion q_diff = q * rhs.q.inverse();
-    return {q_diff.rotate(p_diff), q_diff};
+    // Relative transform: rhs^{-1} ∘ this
+    Eigen::Isometry3d T_lhs = Eigen::Isometry3d::Identity();
+    T_lhs.linear() = q.value.toRotationMatrix();
+    T_lhs.translation() = p.value;
+
+    Eigen::Isometry3d T_rhs = Eigen::Isometry3d::Identity();
+    T_rhs.linear() = rhs.q.value.toRotationMatrix();
+    T_rhs.translation() = rhs.p.value;
+
+    Eigen::Isometry3d Trel = T_rhs.inverse() * T_lhs;
+    return {Point{Trel.translation()}, Quaternion{Trel.linear()}};
   }
 };
 
