@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <Eigen/Dense>
+
 namespace Slam {
 
 template <uint I>

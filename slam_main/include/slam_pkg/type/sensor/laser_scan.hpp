@@ -6,8 +6,7 @@
 
 #include <vector>
 
-#include "../geometry/header.hpp"
-#include "../sensor/laser_scan.hpp"
+#include "slam_pkg/type/geometry/header.hpp"
 
 namespace Slam {
 

@@ -4,14 +4,13 @@
 
 #pragma once
 
-#include <eigen3/Eigen/Eigen>
-
-#include "slam_pkg/type/geometry/point.hpp"
-#include "slam_pkg/type/geometry/vector.hpp"
+#include <Eigen/Geometry>
 
 namespace Slam {
 
 struct Quaternion {
+  Eigen::Quaterniond value{Eigen::Quaterniond::Identity()};
+
   Quaternion() = default;
 
   Quaternion(double w, double x, double y, double z) : value(w, x, y, z) {}
@@ -49,11 +48,22 @@ struct Quaternion {
     return Eigen::Quaterniond{angle_axis};
   }
 
-  [[nodiscard]] Point rotate(const Point& p) const { return {value.matrix() * p.value}; }
-
-  [[nodiscard]] Vector to_rpy() const { return {value.matrix().eulerAngles(0, 1, 2)}; }
-
   [[nodiscard]] double angle_to(Quaternion q) const { return value.angularDistance(q.value); }
+
+  static Quaternion lerp(const Quaternion& q0, const Quaternion& q1, double ratio) {
+    // reference: Quaternion slerp, https://en.wikipedia.org/wiki/Slerp
+
+    // q0_inv * q1
+    Quaternion d = q0.inverse() * q1;
+    // q0 * (q0_inv * q1)^t
+    Quaternion q = q0 * (d ^ ratio);
+
+    return q;
+  }
+
+  [[nodiscard]] Quaternion lerp(const Quaternion& q, double ratio) const {
+    return lerp(*this, q, ratio);
+  }
 
   Quaternion operator*(const Quaternion& q) const { return value * q.value; }
 
@@ -68,8 +78,6 @@ struct Quaternion {
   double& x() { return value.x(); }
   double& y() { return value.y(); }
   double& z() { return value.z(); }
-
-  Eigen::Quaterniond value{1.0, 0.0, 0.0, 0.0};
 };
 
 }  // namespace Slam

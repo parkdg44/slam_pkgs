@@ -5,7 +5,6 @@
 #pragma once
 
 #include "ros2_converter.hpp"
-#include "slam_pkg/module/feature_extractor/orb_extractor.hpp"
 #include "ros2_utils.hpp"
 #include "slam_pkg/util/string_helper/string_helper.hpp"
 
@@ -19,12 +18,6 @@ class SlamNode : public rclcpp::Node {
 
  public:
   SlamNode();
-
-  void ros_callback(const std::string& topic, const sensor_msgs::msg::LaserScan& data);
-
-  void ros_callback(const std::string& topic, const sensor_msgs::msg::PointCloud2& data);
-
-  void ros_callback(const std::string& topic, const nav_msgs::msg::Odometry& data);
 
  private:
   std::unordered_map<std::string, SubPtr<sensor_msgs::msg::LaserScan>> laser_map_{};

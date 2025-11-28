@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "slam_pkg/type/statistics/covariance.hpp"
 #include "vector.hpp"
 
 namespace Slam {

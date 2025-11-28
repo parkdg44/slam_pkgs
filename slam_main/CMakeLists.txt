@@ -17,15 +17,22 @@ MESSAGE(STATUS "ROS2_LIBS        = ${ROS2_LIBS}")
 MESSAGE(STATUS "----------------------------")
 
 include_directories(include)
-file(GLOB_RECURSE SRCS app/ros2/*.cpp)
 
-add_executable(${PROJECT_NAME} ${SRCS})
-target_link_libraries(${PROJECT_NAME} ${TARGET_LINK_LIBS})
-ament_target_dependencies(${PROJECT_NAME} ${ROS2_LIBS})
+# Function to add an app with option
+function(add_app APP_NAME)
+	string(TOUPPER ${APP_NAME} APP_NAME_UPPER)
+	option(BUILD_APP_${APP_NAME_UPPER} "Build ${APP_NAME} app" ON)
 
-install(TARGETS
-	${PROJECT_NAME}
-	DESTINATION lib/${PROJECT_NAME})
+	if (BUILD_APP_${APP_NAME_UPPER})
+		message(STATUS "Building app: ${APP_NAME}")
+		add_subdirectory(app/${APP_NAME})
+	else ()
+		message(STATUS "Skipping app: ${APP_NAME}")
+	endif ()
+endfunction()
+
+# Add apps here
+add_app(ros2)
 
 install(DIRECTORY launch
 	DESTINATION share/${PROJECT_NAME}

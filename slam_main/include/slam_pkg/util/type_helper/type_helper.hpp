@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <utility>
+
 namespace Slam::util {
 
 #define HAS_MEMBER(T, EXPR) \

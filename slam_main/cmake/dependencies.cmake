@@ -3,7 +3,6 @@
 
 list(APPEND LIBS Eigen3)
 list(APPEND LIBS Ceres)
-list(APPEND LIBS OpenCV)
 
 foreach(LIB ${LIBS})
 	find_package(${LIB} REQUIRED)
@@ -12,7 +11,6 @@ endforeach()
 # target link only
 list(APPEND TARGET_LINK_LIBS Eigen3::Eigen)
 list(APPEND TARGET_LINK_LIBS Ceres::ceres)
-list(APPEND TARGET_LINK_LIBS ${OpenCV_LIBS})
 
 ################## 3rd party ##################
 

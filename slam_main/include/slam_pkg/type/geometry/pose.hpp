@@ -4,42 +4,44 @@
 
 #pragma once
 
-#include "slam_pkg/type/geometry/point.hpp"
+#include "slam_pkg/type/geometry/header.hpp"
 #include "slam_pkg/type/geometry/quaternion.hpp"
+#include "slam_pkg/type/geometry/vector.hpp"
 #include "slam_pkg/type/statistics/covariance.hpp"
 
 namespace Slam {
 
 struct Pose {
-  Point p{};
-  Quaternion q{};
+  Eigen::Isometry3d value = Eigen::Isometry3d::Identity();
 
-  Pose operator+(Pose const& rhs) const { return {p + q.rotate(rhs.p), q * rhs.q}; }
+  Pose() = default;
 
-  Point operator+(Point const& rhs) const { return {p + q.rotate(rhs)}; }
+  Pose(Eigen::Isometry3d const& iso) : value(iso) {}
 
-  [[nodiscard]] Pose inverse() const {
-    // Use SE(3) inverse: R^T and -R^T t
-    Eigen::Isometry3d T = Eigen::Isometry3d::Identity();
-    T.linear() = q.value.toRotationMatrix();
-    T.translation() = p.value;
-    Eigen::Isometry3d Ti = T.inverse();
-    return {Point{Ti.translation()}, Quaternion{Ti.linear()}};
+  Pose(Eigen::Vector3d const& p, Eigen::Quaterniond const& q) {
+    value.linear() = q.toRotationMatrix();
+    value.translation() = p;
   }
 
-  Pose operator-(Pose const& rhs) const {
-    // Relative transform: rhs^{-1} ∘ this
-    Eigen::Isometry3d T_lhs = Eigen::Isometry3d::Identity();
-    T_lhs.linear() = q.value.toRotationMatrix();
-    T_lhs.translation() = p.value;
-
-    Eigen::Isometry3d T_rhs = Eigen::Isometry3d::Identity();
-    T_rhs.linear() = rhs.q.value.toRotationMatrix();
-    T_rhs.translation() = rhs.p.value;
-
-    Eigen::Isometry3d Trel = T_rhs.inverse() * T_lhs;
-    return {Point{Trel.translation()}, Quaternion{Trel.linear()}};
+  Pose(Vector const& p, Quaternion const& q) {
+    value.linear() = q.value.toRotationMatrix();
+    value.translation() = p.value;
   }
+
+  Vector translation() const { return Vector{value.translation()}; }
+
+  Quaternion rotation() const { return Quaternion{value.rotation()}; }
+
+  [[nodiscard]] Pose inverse() const { return Pose{value.inverse()}; }
+
+  Pose operator+(Pose const& rhs) const { return Pose{this->value * rhs.value}; }
+
+  Vector operator+(Vector const& rhs) const { return Vector{this->value * rhs.value}; }
+
+  Pose operator-() const { return this->inverse(); }
+
+  // Relative transform: rhs^{-1} ∘ this
+  Pose operator-(Pose const& rhs) const { return Pose{rhs.value.inverse() * this->value}; }
 };
 
 struct PoseStamped {
