@@ -10,8 +10,8 @@
 namespace Slam {
 
 struct Twist {
-  Vector angular{};
   Vector linear{};
+  Vector angular{};
 };
 
 struct TwistWithCovariance {

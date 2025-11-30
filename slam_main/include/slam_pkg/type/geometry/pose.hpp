@@ -6,6 +6,7 @@
 
 #include "slam_pkg/type/geometry/header.hpp"
 #include "slam_pkg/type/geometry/quaternion.hpp"
+#include "slam_pkg/type/geometry/twist.hpp"
 #include "slam_pkg/type/geometry/vector.hpp"
 #include "slam_pkg/type/statistics/covariance.hpp"
 
@@ -31,6 +32,12 @@ struct Pose {
   Vector translation() const { return Vector{value.translation()}; }
 
   Quaternion rotation() const { return Quaternion{value.rotation()}; }
+
+  Twist se3() const {
+    Eigen::AngleAxisd angle_axis{value.rotation()};
+    Eigen::Vector3d omega = angle_axis.axis() * angle_axis.angle();
+    return Twist{Vector{value.translation()}, Vector{omega}};
+  }
 
   [[nodiscard]] Pose inverse() const { return Pose{value.inverse()}; }
 

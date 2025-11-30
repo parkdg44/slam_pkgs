@@ -4,9 +4,10 @@
 
 #pragma once
 
+#include <nanoflann/nanoflann.hpp>
+
 #include "slam_pkg/type/geometry/header.hpp"
 #include "slam_pkg/type/sensor/point_cloud.hpp"
-#include "slam_pkg/type/types.hpp"
 
 namespace Slam {
 class Frame {

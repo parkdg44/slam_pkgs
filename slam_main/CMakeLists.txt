@@ -50,4 +50,7 @@ if (BUILD_TESTING)
 	ament_lint_auto_find_test_dependencies()
 endif ()
 
+# Include Google Test configuration
+include(gtest)
+
 ament_package()
