@@ -21,5 +21,5 @@ add_gtest(gtest_quasi_kd_tree
 
 # Link necessary libraries to the test
 target_link_libraries(gtest_quasi_kd_tree
-    # Add your slam_pkg library or other dependencies here if needed
+    TBB::tbb
 )

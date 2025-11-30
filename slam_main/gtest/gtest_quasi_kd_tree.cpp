@@ -25,9 +25,10 @@ struct BenchmarkPoint {
 };
 
 // Helper function to generate random points
-void generate_random_points(std::vector<BenchmarkPoint>& points, size_t count, double max_coord) {
+void generate_random_points(std::vector<BenchmarkPoint>& points, size_t count, double max_coord,
+                            unsigned int seed = 42) {
   points.resize(count);
-  std::mt19937 gen(42);
+  std::mt19937 gen(seed);
   std::uniform_real_distribution<> dis(-max_coord, max_coord);
 
   for (size_t i = 0; i < count; ++i) {
@@ -68,20 +69,23 @@ TEST_F(BenchmarkTest, Comparison) {
     Slam::BuildBenchMarkResult build_benchmark;
     auto start_build_quasi = std::chrono::high_resolution_clock::now();
     double max_distance = 0.5;
+    uint top_n = 3;
     Slam::QuasiKdTree<BenchmarkPoint> quasi_kd_tree(
         0.25, max_distance,
-        5);  // resolution=1.0, max_distance=3.0, top_n=5
+        top_n);  // resolution=1.0, max_distance=3.0, top_n=3
     quasi_kd_tree.build(map_points_, &build_benchmark);
     auto end_build_quasi = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double, std::milli> build_duration_quasi =
         end_build_quasi - start_build_quasi;
+    std::cout << "[QuasiKdTree] Top N: " << top_n << std::endl;
     std::cout << "[QuasiKdTree] Build time: " << build_duration_quasi.count() << " ms" << std::endl;
     std::cout << "    - Data Preparation: " << build_benchmark.data_preparation_time.count()
               << " ms" << std::endl;
     std::cout << "    - Reverse Mapping: " << build_benchmark.reverse_mapping_time.count() << " ms"
               << std::endl;
-    std::cout << "    - Top-N Optimization: " << build_benchmark.top_n_optimization_time.count()
-              << " ms" << std::endl;
+    std::cout << "    - Merging: " << build_benchmark.merging_time.count() << " ms" << std::endl;
+    std::cout << "    - Linear Build: " << build_benchmark.linear_build_time.count() << " ms"
+              << std::endl;
 
     // --- Query and Compare ---
     std::vector<std::pair<const PointCloud<double>::Point*, double>> kdtree_results;
@@ -118,7 +122,7 @@ TEST_F(BenchmarkTest, Comparison) {
 
       auto find_nearest_start = std::chrono::high_resolution_clock::now();
       Slam::BenchMarkResult find_nearest_benchmark_single;
-      auto nearest_ptr = quasi_kd_tree.findNearest(q_point, &find_nearest_benchmark_single).lock();
+      auto nearest_ptr = quasi_kd_tree.findNearest(q_point, &find_nearest_benchmark_single);
       auto find_nearest_end = std::chrono::high_resolution_clock::now();
       find_nearest_duration_total += (find_nearest_end - find_nearest_start);
       find_nearest_benchmark_total.voxel_lookup_time +=
