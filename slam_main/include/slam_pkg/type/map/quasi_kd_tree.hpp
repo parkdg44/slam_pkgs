@@ -14,7 +14,7 @@
 #include <utility>
 #include <vector>
 
-#include "rdestl/hash_map.h"
+#include "ankerl/unordered_dense.h"
 
 namespace Slam {
 
@@ -96,7 +96,7 @@ class QuasiKdTree {
     std::vector<float> ys;
     std::vector<float> zs;
     std::vector<uint32_t> indices;
-    rde::hash_map<uint64_t, VoxelRange> map;
+    ankerl::unordered_dense::map<uint64_t, VoxelRange> map;
   };
 
   QuasiKdTree(double resolution, double max_distance, size_t top_n = 3)
