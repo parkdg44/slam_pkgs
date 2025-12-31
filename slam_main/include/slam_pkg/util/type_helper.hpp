@@ -9,7 +9,7 @@
 namespace Slam::util {
 
 #define HAS_MEMBER(T, EXPR) \
-  has_member_impl<T>([](auto&& obj) -> decltype(obj.EXPR) { return obj.EXPR; })
+  Slam::util::has_member_impl<T>([](auto&& obj) -> decltype(obj.EXPR) { return obj.EXPR; })
 
 template <typename... T, typename F>
 constexpr inline auto has_member_impl(F&& f) -> decltype(f((std::declval<T>(), ...)), true) {

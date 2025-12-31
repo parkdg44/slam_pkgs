@@ -15,11 +15,6 @@ function(add_gtest test_name)
 endfunction()
 
 # Add test executable
-add_gtest(gtest_quasi_kd_tree
-    gtest/gtest_quasi_kd_tree.cpp
-)
-
-# Link necessary libraries to the test
-target_link_libraries(gtest_quasi_kd_tree
-    TBB::tbb
+add_gtest(gtest_slot_map
+    gtest/gtest_slot_map.cpp
 )
